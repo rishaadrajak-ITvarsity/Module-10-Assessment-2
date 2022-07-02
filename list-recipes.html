@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>My Recipe Book</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="fontAwesome/css/all.css"/>
+    </head>    
+
+    <body class="body-meals" onload="getRecipeList()">
+        
+        <div class="header">
+            
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i>
+                <img src="images/logo-text.png"/>
+            </a>
+
+        </div>
+
+        <div id="meals">
+
+            <div class="meals-list" id="output">
+
+            </div>
+
+        </div>
+
+        <script>
+            var category = getCategory()
+            //console.log(category)
+
+
+            function getRecipeList(){
+                var rootPath = "https://mysite.itvarsity.org/api/recipe-book/"
+                var fullPath = rootPath + "get-recipes/?category=" + category
+                //console.log("Path: "+fullPath)
+
+                fetch(fullPath)
+                    .then(function(response){
+                        return response.json()
+                    })
+                    .then(function(data){
+                        var output = ""
+                        //console.log(data)
+                        for(a = 0; a < data.length; a++){
+                            output += `
+                                <a href="show-recipe.html?id=${data[a].id}">
+                                    <div class="meals-list-item">
+                                        <h1>${data[a].title}<i class="fas fa-chevron-cirlce-right"></i></h1>
+                                        <p>${data[a].description}</p>
+                                    </div>
+                                </a>
+                            `
+                            // console.log("ID : "+ data[a].id)
+                            // console.log("Title : " +data[a].title)
+                            // console.log("Descr : " +data[a].description)
+                        }
+                        document.getElementById("output").innerHTML = output
+                    })
+            }
+
+            function getCategory(){
+                var url = window.location.href
+                var pos = url.search("=")
+                var category = url.slice(pos+1)
+                //console.log(category)
+                return category
+            }
+        </script>
+
+    </body>
+
+</html>
+
